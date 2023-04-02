@@ -7,6 +7,7 @@ namespace UI
 {
     public class UnitHoverUI : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI _factionLabel;
         [SerializeField] private TextMeshProUGUI _nameLabel;
         [SerializeField] private TextMeshProUGUI _healthLabel;
         [SerializeField] private TextMeshProUGUI _powerLabel;
@@ -24,7 +25,8 @@ namespace UI
                 ClearUI();
                 return;
             }
-
+            
+            _factionLabel.text = $"Faction: {unit.faction}";
             _nameLabel.text = $"Name: {unit.name}";
             _healthLabel.text = $"Health: {unit.health}";
             _powerLabel.text = $"Power: {unit.power}";
@@ -33,6 +35,7 @@ namespace UI
 
         private void ClearUI()
         {
+            _factionLabel.text = "";
             _nameLabel.text = "";
             _healthLabel.text = "";
             _powerLabel.text = "";

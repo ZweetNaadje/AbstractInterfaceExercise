@@ -6,8 +6,8 @@
         public float attackRate { get; }
         public float moveSpeed { get; }
 
-        public bool CanAttack();
+        public bool ValidTarget(IUnit target);
 
-        public int Attack();
+        public void SetTarget(IUnit target);
     }
 }

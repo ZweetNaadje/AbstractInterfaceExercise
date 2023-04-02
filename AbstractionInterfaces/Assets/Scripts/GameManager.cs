@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UI;
+using Unit;
 using Unit.Interfaces;
 using UnityEngine;
 
@@ -43,14 +45,34 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1) && _selectedUnit != null)
         {
-            var moveable = _selectedUnit as IMoveable;
+            var target = hitInfo.transform.GetComponent<IUnit>();
+            var moveableUnit = _selectedUnit as IMoveable;
+            var attackableUnit = _selectedUnit as IAttackableUnit;
 
-            if (moveable == null)
+            if (moveableUnit == null)
             {
                 return;
             }
 
-            moveable.Move(hitInfo.point);
+            if (target == null)
+            {
+                if (attackableUnit != null)
+                {
+                    attackableUnit.SetTarget(null);    
+                }
+                
+                moveableUnit.Move(hitInfo.point);
+            }
+
+            if (attackableUnit != null && target != null)
+            {
+                if (!attackableUnit.ValidTarget(target))
+                {
+                    return;
+                }
+
+                attackableUnit.SetTarget(target);
+            }
         }
     }
 }
