@@ -2,7 +2,7 @@
 {
     public interface IUnit
     {
-        public string name { get; } //zelfde als => ""?
+        public string name { get; } 
         public int health { get; }
         public int power { get; }
         public int level { get; }
