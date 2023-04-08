@@ -5,6 +5,9 @@
     /// </summary>
     public interface IHealableUnit
     {
+        /// <summary>
+        /// This method will heal the selected target (ally).
+        /// </summary>
         public void Heal();
     }
 }

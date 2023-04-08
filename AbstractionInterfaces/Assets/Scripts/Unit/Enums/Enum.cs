@@ -1,7 +1,7 @@
 ﻿namespace Unit.Enums
 {
     /// <summary>
-    /// Enums for type safety.
+    /// A faction is the AI's team / ally. 
     /// </summary>
     public enum Faction
     {

@@ -1,4 +1,6 @@
 ﻿using System;
+using Animation;
+using Animation.AnimationInterfaces;
 using Unit.Enums;
 using Unit.Interfaces;
 using UnityEngine;
@@ -6,13 +8,6 @@ using UnityEngine.AI;
 
 namespace Unit
 {
-    public class WeaponTransformConfigurator
-    {
-        public Vector3 WeaponPosition;
-        public Vector3 WeaponRotation;
-    }
-    
-    
     /// <summary>
     /// This is what you could consider the "true" first unit of each faction.
     /// Each other unit, which can attack and move, is derived from this class.
@@ -29,23 +24,8 @@ namespace Unit
         [SerializeField] private float _attackRange;
         [SerializeField] private float _attackRate;
         [SerializeField] private float _moveSpeed;
-        [SerializeField] private GameObject _weapon;
-        [SerializeField] private Transform _spine3Transform;
-        [SerializeField] private Transform _handTransform;
-        
-        
-        private WeaponTransformConfigurator _holsterConfiguration = new WeaponTransformConfigurator
-        {
-            WeaponPosition = new Vector3(-20.8999996f,12.8000002f,12.3000002f), 
-            WeaponRotation = new Vector3(77.788765f,140.669983f,40.6851044f)
-        };
-        
-        private WeaponTransformConfigurator _equippedConfiguration = new WeaponTransformConfigurator
-        {
-            WeaponPosition = new Vector3(9.19999981f,4.19999981f,-2.0999999f),
-            WeaponRotation = new Vector3(306.676514f,228.771957f,105.512306f)
-        };
-        
+        [SerializeField] private AbstractWeapon _weapon;
+
         private IUnit _target;
         private float _attackRateTimer;
 
@@ -63,6 +43,19 @@ namespace Unit
         public virtual float attackRange => _attackRange;
         public virtual float attackRate => _attackRate;
         public virtual float moveSpeed => _moveSpeed;
+
+        private void Start()
+        {
+            if (_weapon == null)
+            {
+                return;
+            }
+            
+            _weapon.transform.localPosition = _weapon.animatable.HolsteredConfiguration.WeaponPosition;
+            _weapon.transform.localRotation = Quaternion.Euler(
+                _weapon.animatable.HolsteredConfiguration.WeaponRotation
+            );
+        }
 
 
         // Checks if the target is a valid attackable target
@@ -101,32 +94,16 @@ namespace Unit
             return true;
         }
 
-        private void OnWeaponGrab(string mode)
+        public void OnWeaponGrab(string mode)
         {
             if (_weapon == null)
             {
-                return;
-            }
-
-            if (mode == "equip")
-            {
-                _weapon.transform.SetParent(_handTransform);
-
-                _weapon.transform.localPosition = _equippedConfiguration.WeaponPosition;
-                _weapon.transform.localRotation = Quaternion.Euler(_equippedConfiguration.WeaponRotation);
-            }
-
-            if (mode == "unequip")
-            {
-                _weapon.transform.SetParent(_spine3Transform);
-
-                _weapon.transform.localPosition = _holsterConfiguration.WeaponPosition;
-                _weapon.transform.localRotation = Quaternion.Euler(_holsterConfiguration.WeaponRotation);
+                return; 
             }
             
-            
+            _weapon.OnWeaponGrab(mode);
         }
-        
+
         private void AttackHandler()
         {
             if (_target == null)
@@ -149,8 +126,10 @@ namespace Unit
 
             Debug.Log("AttackHandler: CanAttack is true");
 
-            bool alive = _target.TakeDamage(power * level);
-
+            bool alive = _target.TakeDamage((power * level) + (_weapon.weaponDamage * _weapon.weaponLevel));
+            
+            
+            
             if (!alive)
             {
                 _target = null;
