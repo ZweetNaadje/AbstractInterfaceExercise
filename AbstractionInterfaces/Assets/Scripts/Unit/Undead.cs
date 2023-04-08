@@ -2,7 +2,7 @@
 
 namespace Unit
 {
-    public class Undead : Soldier
+    public class Undead : Unit
     {
         public override string name => "Skeleton";
         public override int power => 4;

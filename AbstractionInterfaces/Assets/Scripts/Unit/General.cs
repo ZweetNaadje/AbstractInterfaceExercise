@@ -1,6 +1,6 @@
 ﻿namespace Unit
 {
-    public class General : Soldier
+    public class General : Unit
     {
         public override string name => "General";
         public override int power => 5;

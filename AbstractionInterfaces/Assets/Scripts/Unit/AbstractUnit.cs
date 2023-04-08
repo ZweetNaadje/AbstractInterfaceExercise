@@ -6,7 +6,10 @@ using UnityEngine;
 
 namespace Unit
 {
-    public abstract class BaseUnit : MonoBehaviour, IUnit
+    /// <summary>
+    /// Each baseunit has some overrideable variable(s) and function(s).
+    /// </summary>
+    public abstract class AbstractUnit : MonoBehaviour, IUnit
     {
         public virtual Faction faction { get; set; }
         public virtual string name { get; }

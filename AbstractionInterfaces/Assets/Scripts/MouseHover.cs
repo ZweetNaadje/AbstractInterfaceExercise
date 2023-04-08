@@ -9,11 +9,11 @@ public class MouseHover : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _text;
 
-    public List<Soldier> Soldiers = new List<Soldier>();
+    public List<Unit.Unit> Soldiers = new List<Unit.Unit>();
 
     private void Start()
     {
-        var soldier = GetComponent<Soldier>();
+        var soldier = GetComponent<Unit.Unit>();
 
         Soldiers.Add(soldier);
         

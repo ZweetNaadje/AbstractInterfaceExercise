@@ -1,5 +1,8 @@
 ﻿namespace Unit.Interfaces
 {
+    /// <summary>
+    /// Whatever unit implements this interface, is a unit what can attack other units.
+    /// </summary>
     public interface IAttackableUnit
     {
         public float attackRange { get; }

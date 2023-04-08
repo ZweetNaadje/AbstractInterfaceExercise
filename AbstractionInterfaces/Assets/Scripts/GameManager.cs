@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
         MovementHandler();
     }
 
+    // Happy path coding style with the if-statements.
     private void MovementHandler()
     {
         if (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
@@ -45,33 +46,33 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1) && _selectedUnit != null)
         {
-            var target = hitInfo.transform.GetComponent<IUnit>();
-            var moveableUnit = _selectedUnit as IMoveable;
-            var attackableUnit = _selectedUnit as IAttackableUnit;
+            var target = hitInfo.transform.GetComponent<IUnit>(); // Specified with "target" in the comments.
+            var movableUnit = _selectedUnit as IMovable; // Is the selected unit able to move?
+            var attackableUnit = _selectedUnit as IAttackableUnit; // Is the selected unit able to attack?
 
-            if (moveableUnit == null)
+            if (movableUnit == null) // If you select a non movable unit, return. Currently all code after this part is meant for movable units.
             {
                 return;
             }
 
-            if (target == null)
+            if (target == null) // If you didn't click on something which has an "IUnit" (ex: the ground), 
             {
-                if (attackableUnit != null)
+                if (attackableUnit != null) // if you did click on an attackableUnit 
                 {
-                    attackableUnit.SetTarget(null);    
+                    attackableUnit.SetTarget(null); // Clear the stored reference to "target". Otherwise you can't move away from a target.
                 }
                 
-                moveableUnit.Move(hitInfo.point);
+                movableUnit.Move(hitInfo.point); // Move the movableUnit to where you clicked in worldspace.
             }
 
             if (attackableUnit != null && target != null)
             {
-                if (!attackableUnit.ValidTarget(target))
+                if (!attackableUnit.ValidTarget(target)) // If the attackableUnit doesn't have a valid "target", return. 
                 {
                     return;
                 }
 
-                attackableUnit.SetTarget(target);
+                attackableUnit.SetTarget(target); // The attackableUnit will target the "target".
             }
         }
     }
